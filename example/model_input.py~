@@ -1,0 +1,123 @@
+# The input file for the program sigal.py. More options are available in setup.py.
+#********************************************************************************
+
+number_of_galaxies = 100	# Number of modelling galaxies
+gal_type = 'ell' 		#    'ell' - only elliptical galaxies
+				#    'disk' - only disk galaxies of dif. morph. types (including S0!)
+				#    'all' - both spiral and elliptical galaxies
+compress = 'YES'		# If you want to compress the output file use 'gzip', 'bzip2'. Otherwise use 'NO'.
+
+# CCD characteristics:
+GAIN = (1.6,6.5)		# uniform, [e/DN]
+readnoise = (1.,12.)		# uniform, [e]
+m0 = 28.26			# [mag/arcsec^2]
+ncombine = 1			# number of combined images
+exptime = 53.907		# duration of 1 exposure [sec]
+pix2secx = 0.396		# platescale x, [arcsec/pix]
+pix2secy = 0.396		# platescale y, [arcsec/pix]
+nx = 2048			# dimx, [pix] 2048
+ny = 1489			# dimy, [pix]	1489
+ima_filter = 'r'		# Photometric band
+
+# Scale:
+scale = (0.100,0.300)		# 'uniform', [kpc/arcsec]
+
+# PSF:
+fwhm_psf_type = 'normal'	# 'uniform' or 'normal'
+fwhm_psf = (1.3,0.05)		# In arcsec:
+				# if normal: (<fwhm>,std.dev(fwhm))
+				# if uniform: (fwhm_min,fwhm_max)
+				# If (0.,0.) - the convolution will not be done
+
+
+#********Components (All are given in [kpc] and [mag/arcsec^2])********:
+#***DISK PARAMETERS***:
+incl = (0,0)			# Inclination angle, [deg]. Uniform distribution: (incl_min,incl_max)
+
+# Central surface brighntess of the face-on disk:
+S0d_type = 'normal'		# 'normal' or 'uniform'
+S0d = (20.0,0.5)		# if normal: (<S0d>,std.dev(S0d))
+				# if uniform: (S0d_min,S0d_max)
+# Radial scale of the disk:
+h_type = 'normal'		# 'normal' or 'uniform'
+h = (2.5,0.6)			# if normal: (<h>,std.dev(h))
+				# if uniform: (h_min,h_max)
+# Height scale of the edge-on disk (valid only if inclination angle incl=90):
+z0_type = 'normal'		# 'normal' or 'uniform'
+z0 = (0.8,0.2)			# if normal: (<z0>,std.dev(z0))
+				# if uniform: (z0_min,z0_max)
+# Truncation radius of the disk:
+rtr_type = 'normal'		# 'normal' or 'uniform'
+rtr = (5.,0.1)			# in units of h 
+
+
+
+#***BULGE/ELL. GALAXY PARAMETERS***:
+# Axis ratio of the bulge:
+q_bul_type = 'uniform'		# 'uniform', 'normal', 'normal_bim'
+q_bul = (0.5,1.0,0.0,0.0)	# For 'uniform':    (q_bul_min,q_bul_max,...)
+				# For 'normal':     (<q_bul>,st.dev(q_bul),...)
+				# For 'normal_bim': (<q_bul1>,st.dev(q_bul1),<q_bul2>,st.dev(q_bul2))
+
+# Effective radius of the bulge:
+re_bul_type = 'uniform'		# 'uniform', 'normal', 'normal_bim'
+re_bul = (0.7,3.0,1.11,0.25)	# For 'uniform':    (re_bul_min,re_bul_max,...)
+				# For 'normal':     (<re_bul>,st.dev(re_bul),...)
+				# For 'normal_bim': (<re_bul1>,st.dev(re_bul1),<re_bul2>,st.dev(re_bul2))
+
+# Effective surface brightness of the bulge:
+me_bul_type = 'uniform'		# 'uniform' or 'normal'
+me_bul = (20.5,21.5,20.03,0.4)	# For 'uniform':    (me_bul_min,me_bul_max)
+				# For 'normal':     (<me_bul>,st.dev(me_bul))
+				# For 'normal_bim': (<me_bul1>,st.dev(me_bul1),<me_bul2>,st.dev(me_bul2))
+
+# Sersic index of the bulge:
+n_bul_type = 'uniform'		# 'uniform', 'normal', 'normal_bim'
+n_bul = (3.,8.,3.4,1.0)		# For 'uniform':    (n_bul_min,n_bul_max,...)
+				# For 'normal':     (<n_bul>,st.dev(n_bul),...)
+				# For 'normal_bim': (<n_bul1>,st.dev(n_bul1),<n_bul2>,st.dev(n_bul2))
+
+# Ellipse index of the bulge:
+c_bul_type = 'normal_bim'	# 'uniform', 'normal', 'normal_bim'
+c_bul = (0.0,0.0,0.0,0.0)	# For 'uniform':    (c_bul_min,c_bul_max,...)
+				# For 'normal':     (<c_bul>,st.dev(c_bul),...)
+				# For 'normal_bim': (<c_bul1>,st.dev(c_bul1),<c_bul2>,st.dev(c_bul2))
+
+
+
+#********CORRELATIONS BETWEEN PARAMETERS********
+use_corr = 'YES'		# Use known correlations to obtain parameters: 'YES' or 'NO'	
+
+	 
+#********ADDITIONAL COMPONENTS********
+# Spirals (see http://ned.ipac.caltech.edu/level5/STRUCTURE/spst.html):
+spirals = 'NO'			# 'YES' or 'NO'
+pitch_angle = (5, 25)           # pitch angle. Uniform distribution from 5 to 25 degrees
+
+# Bending mode (see GALFIT) (for non-edge-on galaxies):
+bend_mode = 'NO'
+ampl = 0.05
+
+# Make warps (only for edge-on galaxies):
+warps = 'NO'
+warp_type = 'normal'		# 'normal' or 'uniform'
+Al = (3.5,0.3)			# in units of h
+Cl = (0.1,0.05)
+Ar = (3.5,0.3)			# in units of h
+Cr = (-0.1,0.05)
+	
+# Add contaminents (stars and galaxies):
+contaminents = (20,2)		# (Number of stars, number of galaxies). 0 if there is no such objects.
+
+# Add Sky background:
+sky_level = (20.2,21.0)		# Background, [mag/arcsec^2]. 'NO' - there is no sky background
+
+# Add dust lane (only for edge-on galaxies):
+dust = 'NO'			# 'YES' or 'NO'
+dust_pars = (0.3,0.1,0.1,0.005)	# (<z_dust>,std.dev(z_dust),<tau>,std.dev(tau))
+				# If (0.,0.,0.,0.) - No dust attenuation will be applied
+
+# Add noise component (gauss and poisson):
+noise = 'YES'			# 'YES' or 'NO' 
+
+

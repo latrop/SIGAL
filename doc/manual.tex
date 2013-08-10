@@ -1,0 +1,101 @@
+%
+% ****** maiksamp.tex 29.11.2001 ******
+%
+
+\documentclass[
+aps,%
+12pt,%
+final,%
+notitlepage,%
+oneside,%
+onecolumn,%
+nobibnotes,%
+nofootinbib,% 
+superscriptaddress,%
+noshowpacs,%
+centertags]%
+{revtex4}
+
+\begin{document}
+%\selectlanguage{english}
+
+\title{Simulation of Galaxy images\\script}% Разбиение на строки осуществляется командой \\
+
+\author{\firstname{A.~V.}~\surname{Mosenkov}}
+% Здесь разбиение на строки осуществляется автоматически или командой \\
+\email{mosenkovAV@gmail.com}
+\affiliation{%
+Saint Petersburg State University, Russia
+}%
+\affiliation{%
+Central Astronomical Observatory of RAS, Russia
+}%
+
+%\date{\today}
+%\today печатает cегодняшнее число
+
+\begin{abstract}
+
+This Python script called SIGAL is intended to simulate galaxy images using GALFIT as the main code to produce such models. The simple model is disk+bulge with some implementations as spiral arms, warps (for edge-on galaxies), bends (for non-edge-on galaxies), dust attenuation, contaminants and sky background. The PSF convolution can be also applied. The poisson and gaussian noise can be added to each pixel. Using this script one can simulate a huge sample of galaxies of different parameter distributions. This program can be used to create a set of such samples to simulate, for instance, SDSS frames and then to recover the parameters of created galaxy images using the DECA code. Here I present the brief description of SIGAL.
+
+\end{abstract}
+
+\maketitle
+
+
+\noindent
+{\bf Key words:\/} galaxies, morphology, structural analysis
+
+\section{Description}
+The SImulation of GALaxy images script is a useful tool to test the decomposition codes, especially of DECA performing. 
+
+You need to have an IRAF system on your computer and the created \texttt{login.cl} file. Then you can call SIGAL by this command:
+
+\texttt{\$ python [path\_to\_SIGAL]/sigal.py}
+
+The input file for SIGAL must be \texttt{model\_input.py}. The example of that file can be found in the directory \texttt{example}. The comments to each parameter are presented in the input file. 
+
+Suppose, you want to simulate a sample of galaxies. The number of galaxies will be the parameter $number\_of\_galaxies$. The morphological type (only elliptical galaxies, only disk galaxies, or both types) can be given by $gal\_type$. If you want to compress the output $fits-$files you can do $compress = 'gzip'$ or $compress = 'bzip2'$. 
+
+Then you can see that some parameters are enclosed in parentheses. This means that you can give the borders of changes (in case of the uniform distribution) or to specify the mean value and the standard deviation for the given parameter (for the normal distribution). 
+
+In the section \textbf{CCD characteristics} you need to specify the information about the image you want to create. The description of parameters can be found in the manual to DECA.  The parameter $scale$ is given to convert physical values of scale parameters to pixels. The PSF FWHM distribution is uniform. 
+
+Then you need to specify all the parameters of the model. The surface brightnesses are given in [mag arcsec$^{-2}$] and the components scales are given in [kpc]. 
+
+The parameter $use\_corr='YES'$ is very important. In this case the simulated galaxies will follow the main correlations between bulge and disk structural parameters.
+
+In order to create warps for edge-on galaxies you should specify the left and right distances $Al$ and $Ar$ from the center where you can see the beginning of the warps. The parameters $Cl$ and $Cr$ are the slopes of the warps. In the z--r coordinates it will be:
+
+\[
+z(r) =  Cl\,(|r|-Al)\;\;\; \mathrm{for\;the\;left\;warp}\,,
+\]
+
+\[
+z(r) =  Cr\,(|r|-Ar)\;\;\; \mathrm{for\;the\;right\;warp}\,. 
+\]
+
+If you want to have an edge-on disk with a dust lane, you can do it by applying the extinction law to the model intensity:
+\[
+I_{new}(r,z) = I(r,z)\,e^{-\tau(r,z)}\,,
+\] 
+
+where 
+
+\[
+\tau (r,z) = 2\,k_0\cdot|r|\cdot\mathrm{K_1}(|r|/h)\cdot 1/ \cosh^2(|z|/z_\mathrm{d})\,,
+\]
+
+and
+
+\[
+k_0 = \tau_f/(2\,z_\mathrm{d})\,.
+\]
+
+Here the parameters $z\_dust=z_\mathrm{d}$ and $tau=\tau_f$.
+
+The parameter $noise$ is useful if you want to create a real CCD image with the gauss and poisson noise. The parameters from section \textbf{CCD characteristics} will be used to add noise to each pixel of the image.
+
+
+\end{document}
+
